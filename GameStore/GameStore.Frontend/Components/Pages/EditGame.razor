@@ -1,0 +1,70 @@
+﻿@page "/editgame"
+
+
+<PageTitle>New game</PageTitle>
+
+<h3 class="text-center">New Game</h3>
+@if(genres is null){
+    <p><em>Loading...</em></p>
+}else {
+    <div class="row flex justify-center">
+        <div class="col-md-4">
+            <EditForm Model="@game" FormName="editGame">
+            <div class="mb-3">
+                <label for="name" class="form-label">Email address</label>
+                <InputText type="text" @bind-Value="game.Name" class="form-control" id="name" aria-describedby="emailHelp"/>
+            </div>
+            
+            
+            <div class="mb-3">
+                <label for="genre" class="form-label">Genre</label>
+                <InputSelect id="genre" class="form-select" @bind-Value="game.GenreId">
+                    <option value="">Select a genre</option>
+                    @foreach(var genre in genres){
+                        <option value="@genre.Id">@genre.Name</option>
+                    }
+                </InputSelect>
+            
+                </div>
+            
+            
+                <div class="mb-3">
+                <label for="number" class="form-label">number</label>
+                <InputNumber id="number" class="form-select" @bind-Value="game.Price" />
+            
+                </div>
+            
+            
+                <div class="mb-3">
+                <label for="releaseDate" class="form-label">Release Date</label>
+                <InputDate id="releaseDate" class="form-select" @bind-Value="game.ReleaseDate">
+            
+                </InputDate>
+            
+                </div>
+            
+            </EditForm>
+        </div>
+    </div>
+
+}
+
+@code {
+    private GameDetails game {get; set;} = new(){
+
+        Name = string.Empty,
+        ReleaseDate = DateOnly.FromDateTime(DateTime.UtcNow)
+    };
+
+
+    private GenresClient genresClient = new();
+
+
+    private Genre[]? genres;
+
+    protected override void OnInitialized(){
+        genres = genresClient.GetGenres();
+    }
+
+
+}
